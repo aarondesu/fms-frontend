@@ -6,25 +6,28 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
-import { useLazyLoginQuery } from "~/redux/api/adminAuthApi";
+import { adminAuthApi, useLazyLoginQuery } from "~/redux/api/adminAuthApi";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router";
+import type { Route } from "./+types/login";
 import { useEffect } from "react";
-import { redirect } from "react-router";
 
 const formSchema = z.object({
   username: z.string(),
   password: z.string(),
 });
 
-export default function Login() {
-  const [login, results] = useLazyLoginQuery();
-  const isDataLoading = results.isLoading || results.isFetching;
+const session_token_key = import.meta.env.VITE_SESSION_TOKEN_KEY;
+
+export default function Login({}: Route.ComponentProps) {
+  const [login, { isLoading, isFetching }] = useLazyLoginQuery();
+  const isDataLoading = isLoading || isFetching;
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -37,16 +40,32 @@ export default function Login() {
   const onSubmit = form.handleSubmit((data) => {
     toast.promise(login(data).unwrap(), {
       loading: "Loading...",
-      success: "Successfully logged in",
-      error: "Failed to login",
+      success: (result) => {
+        // Set token
+        sessionStorage.setItem(session_token_key, result);
+
+        navigate("/admin");
+        return "Successfully logged in";
+      },
+      error: (error) => {
+        console.log(error);
+        if (error) {
+          return error.data.errors[0];
+        }
+        return "Error";
+      },
     });
   });
 
   useEffect(() => {
-    if (results.isSuccess) {
-      redirect("/admin/");
+    if (
+      sessionStorage.getItem(session_token_key) &&
+      sessionStorage.getItem(session_token_key) !== ""
+    ) {
+      toast.info("User already logged in!");
+      navigate("/admin");
     }
-  }, [results.isSuccess]);
+  }, []);
 
   return (
     <div className="flex min-h-screen w-full">
@@ -56,7 +75,11 @@ export default function Login() {
         </div>
         <div className="">
           <Form {...form}>
-            <form onSubmit={onSubmit} className="flex flex-col gap-4">
+            <form
+              onSubmit={onSubmit}
+              method="POST"
+              className="flex flex-col gap-4"
+            >
               <FormField
                 control={form.control}
                 name="username"
@@ -95,7 +118,7 @@ export default function Login() {
                   {isDataLoading ? (
                     <Loader2 className="w-15 h-15 animate-spin" />
                   ) : (
-                    <>Loading</>
+                    <>Login</>
                   )}
                 </Button>
               </div>

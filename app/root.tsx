@@ -47,7 +47,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <Provider store={store}>
-      <Toaster />
+      <Toaster position="bottom-center" />
       <Outlet />
     </Provider>
   );
