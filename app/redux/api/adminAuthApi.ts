@@ -34,7 +34,7 @@ export const adminAuthApi = createApi({
         data: { user: User; token: string };
       }) => result.data.token,
     }),
-    user: builder.query<User, void>({
+    getUser: builder.query<User, void>({
       query: () => ({
         url: "/user",
       }),
@@ -44,4 +44,4 @@ export const adminAuthApi = createApi({
   }),
 });
 
-export const { useLazyLoginQuery, useUserQuery } = adminAuthApi;
+export const { useLazyLoginQuery, useGetUserQuery, usePrefetch } = adminAuthApi;
