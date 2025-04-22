@@ -12,6 +12,9 @@ export default [
   // Admin,
   ...prefix("admin", [
     route("/login", "routes/admin/login.tsx"),
-    layout("routes/admin/layout.tsx", [index("routes/admin/dashboard.tsx")]),
+    layout("routes/admin/layout.tsx", [
+      index("routes/admin/dashboard.tsx"),
+      ...prefix("/admins", [index("routes/admin/admins/index.tsx")]),
+    ]),
   ]),
 ] satisfies RouteConfig;

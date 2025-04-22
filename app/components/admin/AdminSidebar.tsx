@@ -1,7 +1,17 @@
-import { Home, LayoutDashboard } from "lucide-react";
+import {
+  ChevronDown,
+  LayoutDashboard,
+  Plus,
+  Scroll,
+  UserPlus,
+  Users2,
+  Wrench,
+} from "lucide-react";
+
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -9,17 +19,36 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "./ui/sidebar";
+} from "../ui/sidebar";
+import AdminSidebarFooter from "./AdminSidebarFooter";
+import { Collapsible, CollapsibleTrigger } from "../ui/collapsible";
 
 const links = [
   {
     title: "Dashboard",
-    url: "#",
+    url: "/admin",
     icon: LayoutDashboard,
+  },
+  {
+    title: "Admins",
+    url: "/admin/admins",
+    icon: Users2,
+  },
+  {
+    title: "Services",
+    url: "#",
+    icon: Wrench,
+  },
+  {
+    title: "Readings",
+    url: "#",
+    icon: Scroll,
   },
 ];
 
-export default function AdminSidebar() {
+interface AdminSidebarProps {}
+
+export default function AdminSidebar({}: AdminSidebarProps) {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader></SidebarHeader>
@@ -42,6 +71,9 @@ export default function AdminSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <AdminSidebarFooter />
+      </SidebarFooter>
     </Sidebar>
   );
 }
