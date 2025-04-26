@@ -152,7 +152,7 @@ export function DataTable<TData, TValue>({
                   colSpan={table.getAllColumns().length}
                   className="font-bold text-center"
                 >
-                  {isLoading ? "Loading data..." : "No records Available"}
+                  {isLoading ? "Loading data..." : "No records available"}
                 </TableCell>
               </TableRow>
             )}

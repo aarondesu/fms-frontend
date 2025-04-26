@@ -16,21 +16,39 @@ export const adminApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ["admin"],
   endpoints: (builder) => ({
     getAllAdmin: builder.query<
       { list: User[]; lastPage: number },
       { page?: number; search?: string }
     >({
       query: ({ page, search }) => ({
-        url: `/?${page && `page=${page}`}${search && `&search=${search}`}`,
+        url: `/?${page && `&page=${page}`}${
+          search && search?.length > 0 && `&search=${search}`
+        }`,
         method: "GET",
       }),
       transformResponse: (result: {
         success: boolean;
         data: { list: User[]; lastPage: number };
       }) => result.data,
+      providesTags: ["admin"],
+    }),
+    createAdmin: builder.mutation<
+      void,
+      {
+        username: string;
+        password: string;
+      }
+    >({
+      query: (data) => ({
+        url: `/`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["admin"],
     }),
   }),
 });
 
-export const { useGetAllAdminQuery } = adminApi;
+export const { useGetAllAdminQuery, useCreateAdminMutation } = adminApi;

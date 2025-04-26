@@ -14,14 +14,28 @@ import { Separator } from "~/components/ui/separator";
 import { Input } from "~/components/ui/input";
 import { Checkbox } from "~/components/ui/checkbox";
 import { useMediaQuery } from "react-responsive";
+import ConfirmationDialog from "~/components/ConfirmationDialog";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationNumbers,
+  PaginationPrevious,
+} from "~/components/ui/pagination";
+import CreateAdminDialog from "~/components/CreateAdminDialog";
+import { useSearchParams } from "react-router";
+
+const company_name = import.meta.env.VITE_COMPANY_NAME;
 
 export function meta() {
-  return [{ title: "Admins" }];
+  return [{ title: `${company_name} | Admins` }];
 }
 
 export default function AdminsPage() {
-  const [search, setSearch] = useState<string>();
-  const [page, setpPage] = useState<number>();
+  const [search, setSearch] = useState<string>("");
+  let [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
   const { data, isLoading, isFetching, refetch } = useGetAllAdminQuery({
     page: page,
     search: search,
@@ -64,7 +78,7 @@ export default function AdminsPage() {
       header: "Date Created",
       cell: ({ row }) => {
         const date = row.getValue("created_at") as string;
-        const formatted = dayjs(date).toString();
+        const formatted = dayjs(date).format("DD/MM/YYYY").toString();
 
         return <>{formatted}</>;
       },
@@ -80,7 +94,7 @@ export default function AdminsPage() {
   return (
     <div className="p-2 space-y-4">
       <h3 className="text-3xl font-black">Admins</h3>
-      <div className="">
+      <div className="space-y-2">
         <DataTable
           isLoading={isLoadingData}
           table={table}
@@ -93,12 +107,31 @@ export default function AdminsPage() {
               >
                 <RefreshCcw />
               </Button>
-              <Button>
-                <UserPlus2 /> {isNotMobile && "Add"}
-              </Button>
-              <Button>
-                <Trash2 /> {isNotMobile && "Delete"}
-              </Button>
+              <CreateAdminDialog
+                trigger={
+                  <Button
+                    size={isNotMobile ? "default" : "icon"}
+                    disabled={isLoadingData}
+                  >
+                    <UserPlus2 /> {isNotMobile && "Add"}
+                  </Button>
+                }
+              />
+              <ConfirmationDialog
+                title="Delete Admin"
+                description="Are you sure you want to delete the selected admin/s? Action is irreversible."
+                trigger={
+                  <Button
+                    size={isNotMobile ? "default" : "icon"}
+                    disabled={!table.getIsSomeRowsSelected()}
+                  >
+                    <Trash2 /> {isNotMobile && "Delete"}
+                  </Button>
+                }
+                action={() => {
+                  console.log("tes");
+                }}
+              />
               <Separator orientation="vertical" />
               <div className="flex grow gap-2 items-center">
                 <Input
@@ -110,6 +143,21 @@ export default function AdminsPage() {
             </div>
           }
         />
+        <Pagination>
+          <PaginationContent>
+            {page > 1 && (
+              <PaginationItem>
+                <PaginationPrevious href={`?page=${page - 1}`} />
+              </PaginationItem>
+            )}
+            <PaginationNumbers pages={data?.lastPage || 1} currentPage={page} />
+            {page < (data?.lastPage || 1) && (
+              <PaginationItem>
+                <PaginationNext href={`?page=${page + 1}`} />
+              </PaginationItem>
+            )}
+          </PaginationContent>
+        </Pagination>
       </div>
     </div>
   );

@@ -23,6 +23,11 @@ const formSchema = z.object({
 });
 
 const session_token_key = import.meta.env.VITE_SESSION_TOKEN_KEY;
+const company_name = import.meta.env.VITE_COMPANY_NAME;
+
+export function meta() {
+  return [{ title: `${company_name} | Login` }];
+}
 
 export default function Login({}: Route.ComponentProps) {
   const [login, { isLoading, isFetching }] = useLazyLoginQuery();
@@ -39,7 +44,7 @@ export default function Login({}: Route.ComponentProps) {
 
   const onSubmit = form.handleSubmit((data) => {
     toast.promise(login(data).unwrap(), {
-      loading: "Loading...",
+      loading: "Logging in...",
       success: (result) => {
         // Set token
         sessionStorage.setItem(session_token_key, result);

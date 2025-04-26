@@ -2,8 +2,10 @@ import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import type { Route } from "./+types/dashboard";
 import { TabsContent } from "@radix-ui/react-tabs";
 
+const company_name = import.meta.env.VITE_COMPANY_NAME;
+
 export function meta({}: Route.MetaArgs) {
-  return [{ title: "Dashboard" }];
+  return [{ title: `${company_name} | Dashboard` }];
 }
 
 export default function AdminDashboard() {
