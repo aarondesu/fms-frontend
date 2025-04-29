@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { User } from "~/types";
+import type { AdminUser } from "~/types";
 
 const api_base_url = import.meta.env.VITE_API_BASE_URL;
 const session_token_key = import.meta.env.VITE_SESSION_TOKEN_KEY;
@@ -19,7 +19,7 @@ export const adminApi = createApi({
   tagTypes: ["admin"],
   endpoints: (builder) => ({
     getAllAdmin: builder.query<
-      { list: User[]; lastPage: number },
+      { list: AdminUser[]; lastPage: number },
       { page?: number; search?: string }
     >({
       query: ({ page, search }) => ({
@@ -30,7 +30,7 @@ export const adminApi = createApi({
       }),
       transformResponse: (result: {
         success: boolean;
-        data: { list: User[]; lastPage: number };
+        data: { list: AdminUser[]; lastPage: number };
       }) => result.data,
       providesTags: ["admin"],
     }),
@@ -44,11 +44,29 @@ export const adminApi = createApi({
       query: (data) => ({
         url: `/`,
         method: "POST",
-        body: data,
+        body: {
+          username: data.username,
+          password: data.password,
+          privilleges: "admin",
+        },
+      }),
+      invalidatesTags: ["admin"],
+    }),
+    deleteAdmin: builder.mutation<void, number[]>({
+      query: (ids) => ({
+        url: `/`,
+        method: "DELETE",
+        body: {
+          admins: ids,
+        },
       }),
       invalidatesTags: ["admin"],
     }),
   }),
 });
 
-export const { useGetAllAdminQuery, useCreateAdminMutation } = adminApi;
+export const {
+  useGetAllAdminQuery,
+  useCreateAdminMutation,
+  useDeleteAdminMutation,
+} = adminApi;

@@ -1,4 +1,4 @@
-import type { User } from "~/types";
+import type { AdminUser } from "~/types";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
 import {
   DropdownMenu,
@@ -20,7 +20,7 @@ const links = [
     children: [
       {
         title: "Settings",
-        url: "#",
+        url: "/admin/settings",
         icon: Settings,
       },
       {
@@ -62,9 +62,10 @@ export default function AdminSidebarFooter({}: SidebarFooterProps) {
                 <DropdownMenuSeparator />
                 {link.children.map((child) => (
                   <DropdownMenuItem asChild>
-                    <span>
-                      <child.icon /> <a href={child.url}>{child.title}</a>
-                    </span>
+                    <a href={child.url}>
+                      <child.icon />
+                      <span>{child.title}</span>
+                    </a>
                   </DropdownMenuItem>
                 ))}
               </>

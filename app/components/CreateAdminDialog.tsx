@@ -47,26 +47,7 @@ export default function CreateAdminDialog({ trigger }: CreateAdminDialogProps) {
     },
   });
 
-  //   const onSubmit = form.handleSubmit((data) => {
-  //     toast.promise(
-  //       createAdmin({
-  //         username: data.username,
-  //         password: data.password,
-  //       }).unwrap(),
-  //       {
-  //         loading: "Creating admin...",
-  //         success: () => {
-  //           setOpen(false);
-  //           return "Successfully created admin!";
-  //         },
-  //         error: () => {
-  //           return "Failed to create admin";
-  //         },
-  //       }
-  //     );
-  //   });
-
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = form.handleSubmit((data) => {
     toast.promise(
       createAdmin({
         username: data.username,
@@ -79,12 +60,11 @@ export default function CreateAdminDialog({ trigger }: CreateAdminDialogProps) {
           return "Successfully created admin!";
         },
         error: () => {
-          setOpen(false);
           return "Failed to create admin";
         },
       }
     );
-  };
+  });
 
   return (
     <Dialog open={open} onOpenChange={(value) => setOpen(value)}>
@@ -96,7 +76,7 @@ export default function CreateAdminDialog({ trigger }: CreateAdminDialogProps) {
         </DialogHeader>
         <div className="">
           <Form {...form}>
-            <form onSubmit={() => {}} className="space-y-4">
+            <form onSubmit={onSubmit} className="space-y-4">
               <FormField
                 control={form.control}
                 name="username"
@@ -148,15 +128,9 @@ export default function CreateAdminDialog({ trigger }: CreateAdminDialogProps) {
                 )}
               />
               <div className="flex flex-col gap-2">
-                <ConfirmationDialog
-                  title="Create Admin"
-                  description="Are you sure you want to continue?"
-                  trigger={<Button disabled={results.isLoading}>Create</Button>}
-                  action={() => {
-                    form.reset();
-                    form.handleSubmit(onSubmit)();
-                  }}
-                />
+                <Button type="submit" disabled={results.isLoading}>
+                  Create
+                </Button>
                 <DialogClose asChild>
                   <Button variant="secondary" disabled={results.isLoading}>
                     Cancel

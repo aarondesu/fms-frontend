@@ -5,9 +5,12 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 import { DataTable } from "~/components/ui/data-table";
-import { useGetAllAdminQuery } from "~/redux/api/adminApi";
+import {
+  useDeleteAdminMutation,
+  useGetAllAdminQuery,
+} from "~/redux/api/adminApi";
 import dayjs from "dayjs";
-import type { User } from "~/types";
+import type { AdminUser } from "~/types";
 import { Button } from "~/components/ui/button";
 import { RefreshCcw, Search, Trash2, UserPlus2 } from "lucide-react";
 import { Separator } from "~/components/ui/separator";
@@ -25,14 +28,17 @@ import {
 } from "~/components/ui/pagination";
 import CreateAdminDialog from "~/components/CreateAdminDialog";
 import { useSearchParams } from "react-router";
+import { toast } from "sonner";
 
 const company_name = import.meta.env.VITE_COMPANY_NAME;
 
 export function meta() {
-  return [{ title: `${company_name} | Admins` }];
+  return [{ title: `${company_name} | Administrators` }];
 }
 
 export default function AdminsPage() {
+  const [deleteAdmin] = useDeleteAdminMutation();
+
   const [search, setSearch] = useState<string>("");
   let [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
@@ -44,7 +50,7 @@ export default function AdminsPage() {
   const isLoadingData = isLoading || isFetching;
   const isNotMobile = useMediaQuery({ query: "(min-width: 768px)" });
 
-  const columns: ColumnDef<User>[] = [
+  const columns: ColumnDef<AdminUser>[] = [
     {
       id: "select",
       enableHiding: false,
@@ -129,7 +135,21 @@ export default function AdminsPage() {
                   </Button>
                 }
                 action={() => {
-                  console.log("tes");
+                  let admin_ids: number[] = table
+                    .getFilteredSelectedRowModel()
+                    .rows.map((admin) => admin.original.id || 0);
+
+                  toast.promise(deleteAdmin(admin_ids).unwrap(), {
+                    loading: "Deleting selected admins...",
+                    success: () => {
+                      table.resetRowSelection();
+                      return "Successfully removed selected administrators";
+                    },
+                    error: (error) => {
+                      const message = error.data.errors[0];
+                      return message;
+                    },
+                  });
                 }}
               />
               <Separator orientation="vertical" />

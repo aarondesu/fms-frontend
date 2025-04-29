@@ -18,8 +18,8 @@ import type { Route } from "./+types/login";
 import { useEffect } from "react";
 
 const formSchema = z.object({
-  username: z.string(),
-  password: z.string(),
+  username: z.string().min(6),
+  password: z.string().min(6),
 });
 
 const session_token_key = import.meta.env.VITE_SESSION_TOKEN_KEY;
@@ -53,7 +53,6 @@ export default function Login({}: Route.ComponentProps) {
         return "Successfully logged in";
       },
       error: (error) => {
-        console.log(error);
         if (error) {
           return error.data.errors[0];
         }

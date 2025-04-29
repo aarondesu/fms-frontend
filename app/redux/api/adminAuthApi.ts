@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { User } from "~/types";
+import type { AdminUser } from "~/types";
 
 const api_base_url = import.meta.env.VITE_API_BASE_URL;
 const session_token_key = import.meta.env.VITE_SESSION_TOKEN_KEY;
@@ -31,14 +31,14 @@ export const adminAuthApi = createApi({
       }),
       transformResponse: (result: {
         success: boolean;
-        data: { user: User; token: string };
+        data: { user: AdminUser; token: string };
       }) => result.data.token,
     }),
-    getUser: builder.query<User, void>({
+    getUser: builder.query<AdminUser, void>({
       query: () => ({
         url: "/user",
       }),
-      transformResponse: (result: { success: boolean; data: User }) =>
+      transformResponse: (result: { success: boolean; data: AdminUser }) =>
         result.data,
     }),
   }),
