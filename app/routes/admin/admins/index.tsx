@@ -129,7 +129,12 @@ export default function AdminsPage() {
                 trigger={
                   <Button
                     size={isNotMobile ? "default" : "icon"}
-                    disabled={!table.getIsSomeRowsSelected()}
+                    disabled={
+                      !(
+                        table.getIsSomeRowsSelected() ||
+                        table.getIsAllPageRowsSelected()
+                      )
+                    }
                   >
                     <Trash2 /> {isNotMobile && "Delete"}
                   </Button>

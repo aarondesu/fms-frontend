@@ -62,6 +62,20 @@ export const adminApi = createApi({
       }),
       invalidatesTags: ["admin"],
     }),
+    adminChangePassword: builder.mutation<
+      void,
+      {
+        oldPassword: string;
+        newPassword: string;
+      }
+    >({
+      query: (data) => ({
+        url: "/password/change",
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["admin"],
+    }),
   }),
 });
 
@@ -69,4 +83,5 @@ export const {
   useGetAllAdminQuery,
   useCreateAdminMutation,
   useDeleteAdminMutation,
+  useAdminChangePasswordMutation,
 } = adminApi;
