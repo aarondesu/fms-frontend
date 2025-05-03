@@ -36,7 +36,7 @@ const links = [
   },
   {
     title: "Services",
-    url: "#",
+    url: "/admin/services",
     icon: Wrench,
   },
   {
