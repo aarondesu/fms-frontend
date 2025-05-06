@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { Service } from "~/types";
+import type { PaginateQueryResults, PaginateQueryArgs, Service } from "~/types";
 
 const api_base_url = import.meta.env.VITE_API_BASE_URL;
 const session_token_key = import.meta.env.VITE_SESSION_TOKEN_KEY;
@@ -20,14 +20,8 @@ export const serviceApi = createApi({
   tagTypes: ["service"],
   endpoints: (builder) => ({
     getAllServices: builder.query<
-      {
-        list: Service[];
-        lastPage: number;
-      },
-      {
-        page?: number;
-        search?: string;
-      }
+      PaginateQueryResults<Service>,
+      PaginateQueryArgs
     >({
       query: ({ page, search }) => ({
         url: `/?${page && `&page=${page}`}${
@@ -44,7 +38,15 @@ export const serviceApi = createApi({
         };
       }) => result.data,
     }),
+    createService: builder.mutation<void, void>({
+      query: (data) => ({
+        url: "/",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["service"],
+    }),
   }),
 });
 
-export const { useGetAllServicesQuery } = serviceApi;
+export const { useGetAllServicesQuery, useCreateServiceMutation } = serviceApi;

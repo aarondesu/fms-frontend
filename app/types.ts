@@ -10,3 +10,13 @@ export type Service = {
   unit_type: string;
   rate: number;
 };
+
+export type PaginateQueryResults<T> = {
+  list: T[];
+  lastPage: number;
+};
+
+export type PaginateQueryArgs = {
+  page?: number;
+  search?: string;
+};
