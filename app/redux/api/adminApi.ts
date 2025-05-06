@@ -3,6 +3,8 @@ import type {
   PaginateQueryResults,
   AdminUser,
   PaginateQueryArgs,
+  AdminUserLoginArgs,
+  AdminUserChangePasswordArgs,
 } from "~/types";
 
 const api_base_url = import.meta.env.VITE_API_BASE_URL;
@@ -38,13 +40,7 @@ export const adminApi = createApi({
       }) => result.data,
       providesTags: ["admin"],
     }),
-    createAdmin: builder.mutation<
-      void,
-      {
-        username: string;
-        password: string;
-      }
-    >({
+    createAdmin: builder.mutation<void, AdminUserLoginArgs>({
       query: (data) => ({
         url: `/`,
         method: "POST",
@@ -66,13 +62,7 @@ export const adminApi = createApi({
       }),
       invalidatesTags: ["admin"],
     }),
-    adminChangePassword: builder.mutation<
-      void,
-      {
-        oldPassword: string;
-        newPassword: string;
-      }
-    >({
+    adminChangePassword: builder.mutation<void, AdminUserChangePasswordArgs>({
       query: (data) => ({
         url: "/password/change",
         method: "PUT",

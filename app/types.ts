@@ -20,3 +20,13 @@ export type PaginateQueryArgs = {
   page?: number;
   search?: string;
 };
+
+export type AdminUserLoginArgs = {
+  username: string;
+  password: string;
+};
+
+export type AdminUserChangePasswordArgs = {
+  oldPassword: string;
+  newPassword: string;
+};
