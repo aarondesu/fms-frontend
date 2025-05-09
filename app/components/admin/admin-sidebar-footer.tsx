@@ -11,6 +11,7 @@ import {
 import { useGetUserQuery } from "~/redux/api/adminAuthApi";
 import { Skeleton } from "../ui/skeleton";
 import { ChevronUp, LogOut, Settings, User2 } from "lucide-react";
+import { Link } from "react-router";
 
 interface SidebarFooterProps {}
 
@@ -62,10 +63,10 @@ export default function AdminSidebarFooter({}: SidebarFooterProps) {
                 <DropdownMenuSeparator />
                 {link.children.map((child) => (
                   <DropdownMenuItem asChild>
-                    <a href={child.url}>
+                    <Link to={child.url}>
                       <child.icon />
                       <span>{child.title}</span>
-                    </a>
+                    </Link>
                   </DropdownMenuItem>
                 ))}
               </>

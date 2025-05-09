@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import type { Route } from "./+types/settings";
 import { AnimatePresence, motion } from "framer-motion";
 import { Card, CardHeader, CardTitle } from "~/components/ui/card";
-import ChangeAdminPasswordTab from "~/components/admin/ChangeAdminPasswordTab";
+import ChangeAdminPasswordTab from "~/components/admin/change-admin-password-tab";
 
 const company_name = import.meta.env.VITE_COMPANY_NAME;
 

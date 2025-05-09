@@ -2,6 +2,7 @@ import {
   type ColumnDef,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   type Table as ReactTable,
   useReactTable,
   type VisibilityState,
@@ -58,6 +59,7 @@ export function DataTable<TData, TValue>({
       columns: columns || [],
       data: data || [],
       getCoreRowModel: getCoreRowModel(),
+      getPaginationRowModel: getPaginationRowModel(),
       onColumnVisibilityChange: setColumnVisibility,
       onRowSelectionChange: setRowSelection,
       state: {
@@ -131,10 +133,11 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {!isLoading && table.getRowModel().rows?.length ? (
-              table.getCoreRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "isSelected"}
+                  onClick={row.getToggleSelectedHandler()}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

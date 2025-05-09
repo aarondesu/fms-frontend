@@ -28,9 +28,9 @@ export const adminApi = createApi({
       PaginateQueryResults<AdminUser>,
       PaginateQueryArgs
     >({
-      query: ({ page, search }) => ({
-        url: `/?${page && `&page=${page}`}${
-          search && search?.length > 0 && `&search=${search}`
+      query: ({ page, search, results = 10 }) => ({
+        url: `/?results=${results}${page && `&page=${page}`}${
+          search && search.length > 0 && `&search=${search}}`
         }`,
         method: "GET",
       }),

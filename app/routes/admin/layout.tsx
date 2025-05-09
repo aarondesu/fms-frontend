@@ -1,8 +1,8 @@
 import type { Route } from "./+types/layout";
 import { Outlet, useNavigate, useLocation } from "react-router";
 import { SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
-import AdminSidebar from "~/components/admin/AdminSidebar";
-import PageNavigation from "~/components/admin/PageNavigation";
+import AdminSidebar from "~/components/admin/admin-sidebar";
+import PageNavigation from "~/components/admin/page-navigation";
 import { toast } from "sonner";
 import { useEffect } from "react";
 

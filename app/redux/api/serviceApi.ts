@@ -23,9 +23,9 @@ export const serviceApi = createApi({
       PaginateQueryResults<Service>,
       PaginateQueryArgs
     >({
-      query: ({ page, search }) => ({
-        url: `/?${page && `&page=${page}`}${
-          search && search.length > 0 && `&search=${search}`
+      query: ({ page, search, results = 10 }) => ({
+        url: `/?results=${results}${page && `&page=${page}`}${
+          search && search.length > 0 && `&search=${search}}`
         }`,
         method: "GET",
       }),
@@ -38,7 +38,7 @@ export const serviceApi = createApi({
         };
       }) => result.data,
     }),
-    createService: builder.mutation<void, void>({
+    createService: builder.mutation<void, Service>({
       query: (data) => ({
         url: "/",
         method: "POST",

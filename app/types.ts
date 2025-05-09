@@ -19,6 +19,7 @@ export type PaginateQueryResults<T> = {
 export type PaginateQueryArgs = {
   page?: number;
   search?: string;
+  results?: number;
 };
 
 export type AdminUserLoginArgs = {

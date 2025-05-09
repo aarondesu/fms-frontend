@@ -141,7 +141,7 @@ export default function ServicesPage({}: Route.ComponentProps) {
             </div>
           }
         />
-        <DataTableNavigation page={page} lastPage={data?.lastPage || 1} />
+        <DataTableNavigation table={table} />
       </div>
     </div>
   );

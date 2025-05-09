@@ -50,6 +50,7 @@ export default function CreateServiceDialog({
     form.formState.errors.name ||
     form.formState.errors.rate ||
     form.formState.errors.unit_type;
+
   const onSubmit = form.handleSubmit((data) => {
     console.log(data);
   });

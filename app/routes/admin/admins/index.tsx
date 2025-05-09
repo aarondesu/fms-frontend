@@ -1,5 +1,6 @@
 import {
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
   type ColumnDef,
 } from "@tanstack/react-table";
@@ -18,18 +19,11 @@ import { Input } from "~/components/ui/input";
 import { Checkbox } from "~/components/ui/checkbox";
 import { useMediaQuery } from "react-responsive";
 import ConfirmationDialog from "~/components/confirmation-dialog";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationNext,
-  PaginationNumbers,
-  PaginationPrevious,
-} from "~/components/ui/pagination";
 import CreateAdminDialog from "~/components/create-admin-dialog";
 import { useSearchParams } from "react-router";
 import { toast } from "sonner";
 import DataTableNavigation from "~/components/data-table-navigation";
+import type { Route } from "./+types";
 
 const company_name = import.meta.env.VITE_COMPANY_NAME;
 
@@ -37,18 +31,24 @@ export function meta() {
   return [{ title: `${company_name} | Administrators` }];
 }
 
-export default function AdminsPage() {
+export default function AdminsPage({}: Route.ComponentProps) {
   const [deleteAdmin] = useDeleteAdminMutation();
 
   const [search, setSearch] = useState<string>("");
   let [searchParams, setSearchParams] = useSearchParams();
-  const page = Number(searchParams.get("page")) || 1;
+  //const page = Number(searchParams.get("page")) || 1;
+  const [pagination, setPaginationState] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  const [page, setPage] = useState<number>(1);
   const { data, isLoading, isFetching, refetch } = useGetAllAdminQuery({
-    page: page,
+    page: pagination.pageIndex + 1,
+    results: 100,
     search: search,
   });
 
-  const isLoadingData = isLoading || isFetching;
+  const isLoadingData = isLoading;
   const isNotMobile = useMediaQuery({ query: "(min-width: 768px)" });
 
   const columns: ColumnDef<AdminUser>[] = [
@@ -93,9 +93,10 @@ export default function AdminsPage() {
   ];
 
   const table = useReactTable({
-    getCoreRowModel: getCoreRowModel(),
     columns: columns,
     data: data?.list || [],
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
@@ -169,7 +170,7 @@ export default function AdminsPage() {
             </div>
           }
         />
-        <DataTableNavigation page={page} lastPage={data?.lastPage || 1} />
+        <DataTableNavigation table={table} />
       </div>
     </div>
   );
