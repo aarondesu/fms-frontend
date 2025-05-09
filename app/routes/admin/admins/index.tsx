@@ -17,7 +17,7 @@ import { Separator } from "~/components/ui/separator";
 import { Input } from "~/components/ui/input";
 import { Checkbox } from "~/components/ui/checkbox";
 import { useMediaQuery } from "react-responsive";
-import ConfirmationDialog from "~/components/ConfirmationDialog";
+import ConfirmationDialog from "~/components/confirmation-dialog";
 import {
   Pagination,
   PaginationContent,
@@ -26,9 +26,10 @@ import {
   PaginationNumbers,
   PaginationPrevious,
 } from "~/components/ui/pagination";
-import CreateAdminDialog from "~/components/CreateAdminDialog";
+import CreateAdminDialog from "~/components/create-admin-dialog";
 import { useSearchParams } from "react-router";
 import { toast } from "sonner";
+import DataTableNavigation from "~/components/data-table-navigation";
 
 const company_name = import.meta.env.VITE_COMPANY_NAME;
 
@@ -111,7 +112,7 @@ export default function AdminsPage() {
                 disabled={isLoadingData}
                 onClick={() => refetch()}
               >
-                <RefreshCcw />
+                <RefreshCcw className={isLoadingData ? "animate-spin" : ""} />
               </Button>
               <CreateAdminDialog
                 trigger={
@@ -168,21 +169,7 @@ export default function AdminsPage() {
             </div>
           }
         />
-        <Pagination>
-          <PaginationContent>
-            {page > 1 && (
-              <PaginationItem>
-                <PaginationPrevious href={`?page=${page - 1}`} />
-              </PaginationItem>
-            )}
-            <PaginationNumbers pages={data?.lastPage || 1} currentPage={page} />
-            {page < (data?.lastPage || 1) && (
-              <PaginationItem>
-                <PaginationNext href={`?page=${page + 1}`} />
-              </PaginationItem>
-            )}
-          </PaginationContent>
-        </Pagination>
+        <DataTableNavigation page={page} lastPage={data?.lastPage || 1} />
       </div>
     </div>
   );

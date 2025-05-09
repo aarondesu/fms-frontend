@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import ConfirmationDialog from "./ConfirmationDialog";
+import ConfirmationDialog from "./confirmation-dialog";
 import { toast } from "sonner";
 import { useCreateAdminMutation } from "~/redux/api/adminApi";
 import { useState } from "react";

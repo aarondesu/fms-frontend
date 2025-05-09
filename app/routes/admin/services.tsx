@@ -10,6 +10,22 @@ import {
 import type { Service } from "~/types";
 import { Checkbox } from "~/components/ui/checkbox";
 import { DataTable } from "~/components/ui/data-table";
+import { Button } from "~/components/ui/button";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  Moon,
+  PlusCircle,
+  RefreshCcw,
+  Trash2,
+} from "lucide-react";
+import { useMediaQuery } from "react-responsive";
+import { Separator } from "~/components/ui/separator";
+import { Input } from "~/components/ui/input";
+import CreateServiceDialog from "~/components/create-service-dialog";
+import DataTableNavigation from "~/components/data-table-navigation";
 
 const company_name = import.meta.env.VITE_COMPANY_NAME;
 
@@ -19,14 +35,18 @@ export function meta({}: Route.MetaArgs) {
 
 export default function ServicesPage({}: Route.ComponentProps) {
   const [search, setSearch] = useState<string>("");
+  const [results, setResults] = useState<number>(30);
+
   const [searchParams] = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
-  const { data, isLoading, isFetching } = useGetAllServicesQuery({
+  const { data, isLoading, isFetching, refetch } = useGetAllServicesQuery({
     page: page,
     search: search,
+    results: results,
   });
 
   const isLoadingData = isLoading || isFetching;
+  const isNotMobile = useMediaQuery({ query: "(min-width: 768px)" });
 
   const columns: ColumnDef<Service>[] = [
     {
@@ -55,12 +75,19 @@ export default function ServicesPage({}: Route.ComponentProps) {
     {
       accessorKey: "name",
       header: "Name",
-      cell: ({ cell }) => (
-        <div className="min-h-300px">
-          {cell.getValue()}
-        </div>
+      cell: ({ row }) => (
+        <div className="min-w-[300px]">{row.getValue("name")}</div>
       ),
       enableHiding: false,
+    },
+    {
+      accessorKey: "unit_type",
+      header: isNotMobile ? "Unit of measurement" : "Unit",
+    },
+    {
+      accessorKey: "rate",
+      header: isNotMobile ? "Rate per unit" : "Rate",
+      cell: ({ row }) => <div>{row.getValue("rate")}</div>,
     },
   ];
 
@@ -74,7 +101,47 @@ export default function ServicesPage({}: Route.ComponentProps) {
     <div className="p-2 space-y-4">
       <h3 className="text-3xl font-black">Services</h3>
       <div className="space-y-2">
-        <DataTable isLoading={isLoadingData} table={table} />
+        <DataTable
+          isLoading={isLoadingData}
+          table={table}
+          actions={
+            <div className="flex w-full gap-2 items-center">
+              <Button
+                size="icon"
+                disabled={isLoadingData}
+                onClick={() => refetch()}
+              >
+                <RefreshCcw className={isLoadingData ? "animate-spin" : ""} />
+              </Button>
+              <CreateServiceDialog
+                trigger={
+                  <Button
+                    size={isNotMobile ? "default" : "icon"}
+                    disabled={isLoadingData}
+                  >
+                    <PlusCircle /> {isNotMobile && "Add"}
+                  </Button>
+                }
+              />
+              <Button
+                disabled={
+                  isLoadingData ||
+                  !(
+                    table.getIsSomeRowsSelected() ||
+                    table.getIsAllPageRowsSelected()
+                  )
+                }
+              >
+                <Trash2 /> {isNotMobile && "Delete"}
+              </Button>
+              <Separator orientation="vertical" />
+              <div className="w-full gap-2 items-center">
+                <Input className="w-full" placeholder="Search" />
+              </div>
+            </div>
+          }
+        />
+        <DataTableNavigation page={page} lastPage={data?.lastPage || 1} />
       </div>
     </div>
   );
