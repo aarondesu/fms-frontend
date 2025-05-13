@@ -23,7 +23,7 @@ import CreateAdminDialog from "~/components/create-admin-dialog";
 import { useSearchParams } from "react-router";
 import { toast } from "sonner";
 import DataTableNavigation from "~/components/data-table-navigation";
-import type { Route } from "./+types";
+import type { Route } from "./+types/admins";
 
 const company_name = import.meta.env.VITE_COMPANY_NAME;
 

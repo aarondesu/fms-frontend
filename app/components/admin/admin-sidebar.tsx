@@ -21,7 +21,6 @@ import {
   SidebarMenuItem,
 } from "../ui/sidebar";
 import AdminSidebarFooter from "./admin-sidebar-footer";
-import { Collapsible, CollapsibleTrigger } from "../ui/collapsible";
 
 const links = [
   {

@@ -14,7 +14,7 @@ export default [
     route("/login", "routes/admin/login.tsx"),
     layout("routes/admin/layout.tsx", [
       index("routes/admin/dashboard.tsx"),
-      ...prefix("/admins", [index("routes/admin/admins/index.tsx")]),
+      route("/admins", "routes/admin/admins.tsx"),
       route("/settings", "routes/admin/settings.tsx"),
       route("/services", "routes/admin/services.tsx"),
     ]),
