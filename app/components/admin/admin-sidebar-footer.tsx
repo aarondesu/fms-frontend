@@ -12,6 +12,7 @@ import { useGetUserQuery } from "~/redux/api/adminAuthApi";
 import { Skeleton } from "../ui/skeleton";
 import { ChevronUp, LogOut, Settings, User2 } from "lucide-react";
 import { Link } from "react-router";
+import { useAdminAuthentication } from "./authentication-provider";
 
 interface SidebarFooterProps {}
 
@@ -35,6 +36,7 @@ const links = [
 
 export default function AdminSidebarFooter({}: SidebarFooterProps) {
   const { data, isLoading } = useGetUserQuery();
+  const { logout } = useAdminAuthentication();
 
   return (
     <SidebarMenu>
@@ -57,7 +59,7 @@ export default function AdminSidebarFooter({}: SidebarFooterProps) {
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent side="top" className="w-[300px]">
-            {links.map((link) => (
+            {/* {links.map((link) => (
               <>
                 <DropdownMenuLabel>{link.name}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
@@ -70,7 +72,21 @@ export default function AdminSidebarFooter({}: SidebarFooterProps) {
                   </DropdownMenuItem>
                 ))}
               </>
-            ))}
+            ))} */}
+            <DropdownMenuLabel>Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link to="/admin/settings">
+                <Settings />
+                <span>Settings</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="#" onClick={() => logout()}>
+                <LogOut />
+                <span>Logout</span>
+              </Link>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
