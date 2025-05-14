@@ -61,16 +61,6 @@ export default function Login({}: Route.ComponentProps) {
     });
   });
 
-  useEffect(() => {
-    if (
-      sessionStorage.getItem(session_token_key) &&
-      sessionStorage.getItem(session_token_key) !== ""
-    ) {
-      toast.info("User already logged in!");
-      navigate("/admin");
-    }
-  }, []);
-
   return (
     <div className="flex min-h-screen w-full">
       <div className="m-auto flex flex-col min-w-[300px] gap-6 select-none">
